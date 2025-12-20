@@ -324,6 +324,72 @@ ltoeq_less:
     sec
 ltoeq_equal:
     rts
+rand_init:
+	jsr entropy_get
+	sta $7A
+	stx $7B
+	cmp #$0
+	beq check_rand_x
+	rts
+check_rand_x:
+	cpx #$0
+	beq rand_init
+	rts
+rand_sixteen:
+	lda $7B
+	lsr
+	lda $7A
+	ror
+	eor $7B
+	sta $7B
+	lda $7A
+	lsr
+	lda #$0
+	ror
+	eor $7A
+	sta $7A
+	lda $7B
+	lsr
+	eor $7A
+	sta $7A
+	eor $7B
+	sta $7B
+	rts
+rand_int:
+;get a random number 0 <= result < a, uses r0-r1
+	sta $2
+	jsr rand_sixteen
+	lda $7A
+	pha
+	lda $2
+	pha
+	lda #$0
+	sta $2
+	sta $3
+	sta $4
+	pla
+rand_mult_loop:
+	clc
+	lsr
+	bcc skip_rand_add
+	pha
+	lda $7A
+	clc
+	adc $3
+	sta $3
+	lda $4
+	adc $2
+	sta $2
+	pla
+skip_rand_add:
+	rol $7A
+	rol $4
+	cmp #$0
+	bne rand_mult_loop
+	pla
+	sta $7A
+	lda $2
+	rts
 rectangle_collide:
 ;r1x, r1w, r1y, r1h, r2x, r2w, r2y, r2h
 ;Carry is set if there is a collision
@@ -406,30 +472,6 @@ restore_stack_and_ret:
     pla
     sta $3F
     rts
-randinit:
-	jsr entropy_get
-	stx $3C
-	and #$FC
-	bne multiplierNotZero
-	txa
-	and #$FC
-multiplierNotZero:
-	ora #$1
-	sta $3B
-	tya
-	ora #$1
-	sta $3D
-	rts
-randbyte:
-	lda $3B
-	sta $60
-	lda $3C
-	sta $61
-	jsr mult_eight
-	clc
-	adc $3D
-	sta $3C
-	rts
 wait_one_jiffy:
     jsr RDTIM
     sta $60
