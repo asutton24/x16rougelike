@@ -1,18 +1,18 @@
 start:
 	jsr rand_init
-	lda #$5
+	lda #60
 	jsr rand_int
 	sta $40
-	lda #$5
+	lda #60
 	jsr rand_int
 	sta $41
-	lda #$5
+	lda #60
 	jsr rand_int
 	sta $42
-	lda #$5
+	lda #60
 	jsr rand_int
 	sta $43
-	lda #$5
+	lda #60
 	jsr rand_int
 	sta $44
 	rts

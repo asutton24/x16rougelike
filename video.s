@@ -40,3 +40,17 @@ plot_point:
 	lda $3
 	sta $9F23
 	rts
+get_point:
+;position in x and y, char stored in r0l, color in r0h
+	txa
+	asl
+	sta $9F20
+	tya
+	clc
+	adc #$B0
+	sta $9F21
+	lda $9F23
+	sta $2
+	lda $9F23
+	sta $2
+

@@ -2,3 +2,5 @@
 7A-7B: rand byte
 7C-7D: aux pointer
 7E-7F: main pointer
+
+8400-8FFF level data

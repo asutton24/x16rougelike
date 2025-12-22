@@ -197,7 +197,6 @@ mult_eight:
 ; $60 * $61
 	lda #$0
 	sta $62
-	ldx #$8
 multLoop:
 	lda $61
 	and #$1
@@ -209,9 +208,7 @@ multLoop:
 noAdd:
 	asl $60
 	lsr $61
-	dex
 	bne multLoop
-    lda $62
 	rts
 add_to_vera:
     clc
@@ -252,6 +249,23 @@ stk_add:
     stx $3F
     clc
     rts
+call_stk_add:
+;add the top 2 values on the call stack
+	pla
+	tay
+	pla
+	tax
+	pla
+	sta $60
+	pla
+	clc
+	adc $60
+	pha
+	txa
+	pha
+	tya
+	pha
+	rts
 sub_sixteen:
 ;subtract r1 from r0
     lda $02
@@ -393,85 +407,51 @@ skip_rand_add:
 rectangle_collide:
 ;r1x, r1w, r1y, r1h, r2x, r2w, r2y, r2h
 ;Carry is set if there is a collision
-    lda $3F
-    pha
-    ldy $E
-    lda $F
-    jsr direct_push
-    ldy $10
-    lda $11
-    jsr direct_push
-    jsr stk_add
+	lda $8
+	pha
+	lda $9
+	pha
+	jsr call_stk_add
     ; r2y + r2h
-    ldy $A
-    lda $B
-    jsr direct_push
-    ldy $C
-    lda $D
-    jsr direct_push
-    jsr stk_add
+	lda $6
+	pha
+	lda $7
+	pha
+	jsr call_stk_add
     ; r2x + r2w
-    ldy $6
-    lda $7
-    jsr direct_push
-    ldy $8
-    lda $9
-    jsr direct_push
-    jsr stk_add
+	lda $4
+	pha
+	lda $5
+	pha
+	jsr call_stk_add
     ; r1y + r1h
-    ldy $2
-    lda $3
-    jsr direct_push
-    ldy $4
-    lda $5
-    jsr direct_push
-    jsr stk_add
+	lda $2
+	pha
+	lda $3
+	pha
+	jsr call_stk_add
     ;r1x + r1w
-    lda $2
-    sta $12
-    lda $3
-    sta $13
-    lda $A
-    sta $4
-    lda $B
-    sta $5
-    jsr direct_pop
-    sty $2
-    sta $3
-    jsr cmp_sixteen
-    bcc restore_stack_and_ret
-    ldy $E
-    lda $F
-    sty $4
-    sta $5
-    jsr direct_pop
-    sty $2
-    sta $3
-    jsr cmp_sixteen
-    bcc restore_stack_and_ret
-    ldy $12
-    lda $13
-    sty $2
-    sta $3
-    jsr direct_pop
-    sty $4
-    sta $5
-    jsr cmp_sixteen
-    jsr ltoeq
-    bcc restore_stack_and_ret
-    ldy $6
-    lda $7
-    sty $2
-    sta $3
-    jsr direct_pop
-    sty $4
-    sta $5
-    jsr cmp_sixteen
-    jsr ltoeq
-restore_stack_and_ret:
-    pla
-    sta $3F
-    rts
+	pla
+	cmp $6
+	bcc not_colliding_3
+	pla
+	cmp $8
+	bcc not_colliding_2
+	pla
+	cmp $2
+	jsr ltoeq
+	bcc not_colliding_1
+	pla
+	cmp $4
+	jsr ltoeq
+	rts
+not_colliding_3:
+	pla
+not_colliding_2:
+	pla
+not_colliding_1:
+	pla
+	rts
 wait_one_jiffy:
     jsr RDTIM
     sta $60
