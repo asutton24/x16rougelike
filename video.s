@@ -26,8 +26,7 @@ clr_line_loop:
 	cmp #$A0
 	bne clr_line_loop
 	rts
-plot_point:
-;position in x and y, char in r0l, color in r0h
+xy_to_vram:
 	txa
 	asl
 	sta $9F20
@@ -35,10 +34,43 @@ plot_point:
 	clc
 	adc #$B0
 	sta $9F21
+	rts
+plot_point:
+;position in x and y, char in r0l, color in r0h
+	jsr xy_to_vram
+plot_at_vram:
 	lda $2
-	sta $9F23
+    sta $9F23
 	lda $3
 	sta $9F23
+	rts
+plot_horizontal:
+;pos in x/y, length in a, char in r0l, color in r0h
+	pha
+	jsr xy_to_vram
+plot_hori_loop:
+	jsr plot_at_vram
+	pla
+	sec
+	sbc #$1
+	pha
+	bne plot_hori_loop
+	pla
+	rts
+plot_vertical:
+    pha
+	jsr xy_to_vram
+plot_vert_loop:
+	jsr plot_at_vram
+	dec $9F20
+	dec $9F20
+	inc $9F21
+	pla
+	sec
+	sbc #$1
+	pha
+	bne plot_vert_loop
+	pla
 	rts
 get_point:
 ;position in x and y, char stored in r0l, color in r0h
