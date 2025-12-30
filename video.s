@@ -85,4 +85,61 @@ get_point:
 	sta $2
 	lda $9F23
 	sta $2
-
+draw_room_outline:
+;room in main ptr
+	ldy #$1
+	lda ($7E),y
+	tax
+	iny
+	lda ($7E),y
+	pha
+	lda #$E
+	sta $3
+	lda #$18
+	sta $2
+	iny
+	iny
+	lda ($7E),y
+	pha
+	dey
+	lda ($7E),y
+	tay
+	pla
+	jsr plot_vertical
+	pla
+	jsr plot_horizontal
+	ldy #$2
+	txa
+	clc
+	adc ($7E),y
+	iny
+	iny
+	tax
+	lda ($7E),y
+	pha
+	dey
+	lda ($7E),y
+	tay
+	pla
+	dex
+	jsr plot_vertical
+	tya
+	ldy #$4
+	clc
+	adc ($7E),y
+	tax
+	dey
+	dey
+	lda ($7E),y
+	pha
+	dey
+	lda ($7E),y
+	pha
+	txa
+	tay
+	pla
+	tax
+	pla
+	dey
+	jsr plot_horizontal
+	rts

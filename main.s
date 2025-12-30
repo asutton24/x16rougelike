@@ -1,46 +1,25 @@
 start:
-	jsr rand_init
-	lda #60
-	jsr rand_int
-	sta $40
-	lda #60
-	jsr rand_int
-	sta $41
-	lda #60
-	jsr rand_int
-	sta $42
-	lda #60
-	jsr rand_int
-	sta $43
-	lda #60
-	jsr rand_int
-	sta $44
-	rts
 	jsr screen_init
+	jsr rand_init
 	lda #$0
-	pha
-plot_loop:
-	ldx #$F
-	ldy #$F
-	pla
-	clc
-	adc #$1
-	pha
-	sec
-	sbc #$1
-	sta $2
-	sta $3
-	jsr plot_point
-	ldx #$3C
-	stx $61
-	jsr clock
-	jmp plot_loop
+	jsr set_room_base
+	jsr allocate_room
+	jsr draw_room_outline	
+	lda #$1
+	jsr set_room_base
+	jsr allocate_room
+	jsr draw_room_outline	
+	lda #$2
+	jsr set_room_base
+	jsr allocate_room
+	jsr draw_room_outline	
+	lda #$3
+	jsr set_room_base
+	jsr allocate_room
+	jsr draw_room_outline	
+	lda #$4
+	jsr set_room_base
+	jsr allocate_room
+	jsr draw_room_outline	
 forever:
 	jmp forever
-clock:
-	jsr wait_one_jiffy
-	ldx $61
-	dex
-	stx $61
-	bne clock
-	rts	
