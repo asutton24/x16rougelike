@@ -249,23 +249,6 @@ stk_add:
     stx $3F
     clc
     rts
-call_stk_add:
-;add the top 2 values on the call stack
-	pla
-	tay
-	pla
-	tax
-	pla
-	sta $60
-	pla
-	clc
-	adc $60
-	pha
-	txa
-	pha
-	tya
-	pha
-	rts
 sub_sixteen:
 ;subtract r1 from r0
     lda $02
@@ -408,49 +391,37 @@ rectangle_collide:
 ;r1x, r1w, r1y, r1h, r2x, r2w, r2y, r2h
 ;Carry is set if there is a collision
 	lda $8
-	pha
-	lda $9
-	pha
-	jsr call_stk_add
+	clc
+	adc $9
+	sta $9
     ; r2y + r2h
 	lda $6
-	pha
-	lda $7
-	pha
-	jsr call_stk_add
+	clc
+	adc $7
+	sta $7
     ; r2x + r2w
 	lda $4
-	pha
-	lda $5
-	pha
-	jsr call_stk_add
+	clc
+	adc $5
+	sta $5
     ; r1y + r1h
 	lda $2
-	pha
-	lda $3
-	pha
-	jsr call_stk_add
-    ;r1x + r1w
-	pla
+	clc
+	adc $3
+    ; r1x + r1w
 	cmp $6
-	bcc not_colliding_3
-	pla
+	bcc not_colliding
+	lda $5
 	cmp $8
-	bcc not_colliding_2
-	pla
-	cmp $2
+	bcc not_colliding
+	lda $2
+	cmp $7
 	jsr ltoeq
-	bcc not_colliding_1
-	pla
-	cmp $4
+	bcc not_colliding
+	lda $4
+	cmp $9
 	jsr ltoeq
-	rts
-not_colliding_3:
-	pla
-not_colliding_2:
-	pla
-not_colliding_1:
-	pla
+not_colliding:
 	rts
 wait_one_jiffy:
     jsr RDTIM

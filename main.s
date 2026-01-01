@@ -4,7 +4,7 @@ start:
 	lda #$0
 	jsr set_room_base
 	jsr allocate_room
-	jsr draw_room_outline	
+	jsr draw_room_outline
 	lda #$1
 	jsr set_room_base
 	jsr allocate_room

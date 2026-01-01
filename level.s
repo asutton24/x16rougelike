@@ -68,7 +68,7 @@ room_check_loop:
 	rts
 do_room_check:
 	ldy #$4
-	ldx #$4
+	ldx #$3
 room_check_copy:
 	lda ($7C),y
 	sta $2,x
