@@ -26,13 +26,13 @@ make_dummy_room:
 	lda #$8
 	jsr rand_int
 	clc
-	adc #$5
+	adc #$7
 	ldy #$2
 	sta ($7E),y
 	lda #$8
 	jsr rand_int
 	clc
-	adc #$5
+	adc #$7
 	ldy #$4
 	sta ($7E),y
 	lda #$4A

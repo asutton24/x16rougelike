@@ -143,3 +143,53 @@ draw_room_outline:
 	dey
 	jsr plot_horizontal
 	rts
+draw_room_doors:
+	lda #$2B
+	sta $2
+	lda #$D
+	sta $3
+	ldy #$2
+	lda ($7E),y
+	dey
+	lsr
+	clc
+	adc ($7E),y
+	tax
+	iny
+	iny
+	lda ($7E),y
+	tay
+	jsr plot_point
+	tya
+	ldy #$4
+	adc ($7E),y
+	tay
+	dey
+	jsr plot_point
+	ldy #$4
+	lda ($7E),y
+	dey
+	lsr
+	clc
+	adc ($7E),y
+	pha
+	pha
+	dey
+	dey
+	lda ($7E),y
+	tax
+	pla
+	tay
+	jsr plot_point
+	ldy #$2
+	clc
+	txa
+	adc ($7E),y
+	tax
+	dex
+	pla
+	tay
+	jmp plot_point
+draw_room_exterior:
+	jsr draw_room_outline
+	jmp draw_room_doors
