@@ -84,6 +84,9 @@ room_check_copy:
 	sec
 	rts
 allocate_room:
+	lda #$1
+	ldy #$0
+	sta ($7E),y
 	jsr make_dummy_room
 	jsr check_room_validity
 	bcs allocate_room

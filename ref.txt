@@ -3,4 +3,12 @@
 7C-7D: aux pointer
 7E-7F: main pointer
 
-8400-8FFF level data
+8000-803F player memory
+
+8000-8001 player x y
+8002-8003 tile cache
+8004-8005 step counter
+
+8040-80FF active entities
+8100-813F active projectiles 
+BE00-BFFF level data
