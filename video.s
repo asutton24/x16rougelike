@@ -188,3 +188,54 @@ draw_room_doors:
 draw_room_exterior:
 	jsr draw_room_outline
 	jmp draw_room_doors
+clear_room_interior:
+	lda #$0
+	sta $2
+	sta $3
+draw_floor_shortcut:
+	ldy #$1
+	lda ($7E),y
+	iny
+	clc
+	adc ($7E),y
+	sec
+	sbc #$2
+	tax
+	iny
+	iny
+	lda ($7E),y
+	sec
+	sbc #$2
+	pha
+	dey
+	lda ($7E),y
+	clc
+	adc #$1
+	tay
+clear_room_int_loop:
+	pla
+	pha
+	jsr plot_vertical
+	dex
+	tya
+	pha
+	ldy #$1
+	txa
+	cmp ($7E),y
+	beq room_clear_finished
+	pla
+	tay
+	jmp clear_room_int_loop
+room_clear_finished:
+	pla
+	pla
+	rts
+draw_room_floor:
+	lda #$2E
+	sta $2
+	lda #$F
+	sta $3
+	jmp draw_floor_shortcut
+draw_room_interior:
+	jsr draw_room_floor
+	rts

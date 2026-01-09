@@ -5,6 +5,7 @@ start:
 	jsr set_room_base
 	jsr allocate_room
 	jsr draw_room_exterior
+	jsr draw_room_interior
 	lda #$1
 	jsr set_room_base
 	jsr allocate_room

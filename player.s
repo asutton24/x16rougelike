@@ -60,3 +60,36 @@ valid_player_move:
 	cmp #$18
 	beq invalid_player_move
 	jmp update_player_pos
+what_room_am_i_in:
+	lda #$0
+	sta $7E
+	lda #$BE
+	sta $7F
+	ldx #$0
+am_i_in_this_room:
+	ldy #$0
+	lda ($7E),y
+	bne could_be_in_room
+	lda #$FF
+	rts
+could_be_in_room:
+	ldy #$1
+	lda $8000
+	sec
+	sbc ($7E),y
+	iny
+	cmp ($7E),y
+	bcs player_not_in_room
+	iny
+	lda $8001
+	sec
+	sbc ($7E),y
+	iny
+	cmp ($7E),y
+	bcs player_not_in_room
+	txa
+	rts
+player_not_in_room:
+	jsr next_room
+	inx
+	jmp am_i_in_this_room

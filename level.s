@@ -22,6 +22,19 @@ next_room:
 	adc #$0
 	sta $7F
 	rts
+clear_room:
+	lda #$0
+	tay
+	sta ($7E),y
+	ldy #$1D
+room_not_clear:
+	sta ($7E),y
+	dey
+	dey
+	dey
+	cpy #$2
+	bne room_not_clear
+	rts
 make_dummy_room:
 	lda #$8
 	jsr rand_int
