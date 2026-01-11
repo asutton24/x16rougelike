@@ -11,5 +11,6 @@
 8004-8005 step counter
 
 8040-80FF active entities
-8100-813F active projectiles 
+8100-817F active projectiles
+(0: type, 12: xy, 34: tile cache, 56 velocity, 7 lifespan)
 BE00-BFFF level data
