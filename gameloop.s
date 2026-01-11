@@ -10,7 +10,7 @@ wait_for_frame_top:
 wait_for_player_input:
 	jsr are_buttons_pressed
 	bcc wait_for_frame_top
-	jsr make_player_move
+	jsr player_update
 wait_for_no_presses:
 	jsr RDTIM
 	sec

@@ -5,11 +5,10 @@ start:
 	jsr set_room_base
 	jsr allocate_room
 	jsr draw_room_exterior
-	jsr draw_room_interior
 	lda #$1
 	jsr set_room_base
 	jsr allocate_room
-	jsr draw_room_exterior	
+	jsr draw_room_exterior
 	lda #$2
 	jsr set_room_base
 	jsr allocate_room
@@ -22,6 +21,8 @@ start:
 	jsr set_room_base
 	jsr allocate_room
 	jsr draw_room_exterior
+	lda #$5
+	jsr clear_room
 	ldx #$0
 	ldy #$0
 	jsr init_player_pos

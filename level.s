@@ -104,3 +104,11 @@ allocate_room:
 	jsr check_room_validity
 	bcs allocate_room
 	rts
+load_room:
+	jsr set_room_base
+	jsr draw_room_floor
+	rts
+unload_room:
+	jsr set_room_base
+	jsr clear_room_interior
+	rts
