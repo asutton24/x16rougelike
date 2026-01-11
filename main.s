@@ -22,6 +22,7 @@ start:
 	jsr allocate_room
 	jsr draw_room_exterior
 	lda #$5
+	jsr set_room_base
 	jsr clear_room
 	ldx #$0
 	ldy #$0

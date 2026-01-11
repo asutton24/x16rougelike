@@ -21,6 +21,11 @@ update_player_pos:
 	ldx $8000
 	ldy $8001
 	lda $8002
+	bne dont_tunnel
+	lda #$F
+	sta $8003
+	lda #$23
+dont_tunnel:
 	sta $2
 	lda $8003
 	sta $3
@@ -126,5 +131,5 @@ dont_unload_room:
 	ldy $8001
 	jsr init_player_pos
 dont_load_room:
-	rts
 same_enviornment:
+	rts

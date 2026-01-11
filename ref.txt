@@ -1,4 +1,5 @@
 02-21: R0-RF
+3E: clock
 7A-7B: rand byte
 7C-7D: aux pointer
 7E-7F: main pointer
