@@ -1,4 +1,19 @@
+ram_init:
+	lda #$81
+	sta $7F
+	lda #$0
+	tay
+	sta $7E
+resetting_projectiles:
+	lda #$0
+	sta ($7E),y
+	jsr next_projectile
+	lda $7E
+	cmp #$80
+	bne resetting_projectiles
+	rts
 start:
+	jsr ram_init
 	jsr screen_init
 	jsr rand_init
 	lda #$0

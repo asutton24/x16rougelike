@@ -11,6 +11,7 @@ wait_for_player_input:
 	jsr are_buttons_pressed
 	bcc wait_for_frame_top
 	jsr player_update
+	jsr update_all_projectiles
 wait_for_no_presses:
 	jsr RDTIM
 	sec

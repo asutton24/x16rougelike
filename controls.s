@@ -48,3 +48,57 @@ get_dpad_direction:
 	lda #$0
 valid_dpad:
 	rts
+get_shooting_direction:
+;0 for none (or more than one), 8 for up, 4 for down, 2 for left, 1 for right
+	jsr get_player_input
+	bcs check_abxy_controller
+	tay
+	txa
+	cmp #$40
+	bne not_keyboard_s
+	lda #$8
+	rts
+not_keyboard_s:
+	cmp #$80
+	bne not_keyboard_x
+	lda #$4
+	rts
+not_keyboard_x:
+	tya
+	cmp #$80
+	bne not_keyboard_z
+	lda #$2
+	rts
+not_keyboard_z:
+	txa
+	cmp #$10
+	bne not_any_shooting
+	lda #$1
+	rts
+not_any_shooting:
+	lda #$0
+	rts
+check_abxy_controller:
+	tay
+	txa
+	cmp #$40
+	bne not_controller_x
+	lda #$8
+	rts
+not_controller_x:
+	tya
+	cmp #$80
+	bne not_controller_b
+	lda #$4
+	rts
+not_controller_b:
+	cmp #$40
+	bne not_controller_y
+	lda #$2
+	rts
+not_controller_y:
+	txa
+	cmp #$80
+	bne not_any_shooting
+	lda #$1
+	rts

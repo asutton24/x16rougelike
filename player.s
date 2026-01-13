@@ -110,6 +110,51 @@ player_not_in_room:
 	jsr next_room
 	inx
 	jmp am_i_in_this_room
+create_player_projectile:
+	lda #$0
+	sta $2
+	sta $3
+	jsr get_shooting_direction
+	cmp #$0
+	beq no_proj_to_create
+	ldx $8000
+	ldy $8001
+	cmp #$8
+	bne player_proj_not_up
+	dey
+	lda #$FF
+	sta $3
+	jmp player_proj_set
+player_proj_not_up:
+	cmp #$4
+	bne player_proj_not_down
+	iny
+	lda #$1
+	sta $3
+	jmp player_proj_set
+player_proj_not_down:
+	cmp #$2
+	bne player_proj_not_left
+	dex
+	lda #$FF
+	sta $2
+	jmp player_proj_set
+player_proj_not_left:
+	cmp #$1
+	bne no_proj_to_create
+	inx
+	lda #$1
+	sta $2
+player_proj_set:
+	lda #$1
+	sta $6
+	sta $5
+	lda #$2F
+	sta $4
+	lda #$3
+	jsr create_projectile
+no_proj_to_create:
+	rts
 player_update:
 	jsr what_room_am_i_in
 	pha
@@ -132,4 +177,5 @@ dont_unload_room:
 	jsr init_player_pos
 dont_load_room:
 same_enviornment:
+	jsr create_player_projectile
 	rts

@@ -23,7 +23,7 @@ find_avail_proj_loop:
 	lda ($7E),y
 	clc
 	beq found_avail_proj
-	jsr next projectile
+	jsr next_projectile
 	bpl find_avail_proj_loop
 	sec
 found_avail_proj:
@@ -83,9 +83,13 @@ create_projectile:
 	rts
 invalid_creation_point:
 	pla
+projectile_not_active:
 	rts
 projectile_update:
-	ldy #$1
+	ldy #$0
+	lda ($7E),y
+	beq projectile_not_active
+	iny
 	lda ($7E),y
 	tax
 	iny
@@ -163,4 +167,16 @@ proj_no_longer_exists:
 	lda #$0
 	tay
 	sta ($7E),y
+	rts
+update_all_projectiles:
+	lda #$81
+	sta $7F
+	lda #$0
+	sta $7E
+keep_updating_projectiles:
+	jsr projectile_update
+	jsr next_projectile
+	lda $7E
+	cmp #$80
+	bne keep_updating_projectiles
 	rts
